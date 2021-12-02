@@ -1,5 +1,6 @@
 package com.esgi.filmchecker.service
 
+import com.esgi.filmchecker.model.APIParserDTO
 import com.esgi.filmchecker.model.Actor
 import com.esgi.filmchecker.model.Category
 import com.esgi.filmchecker.model.Film
@@ -13,39 +14,44 @@ class FilmService {
     private val url = "https://api.themoviedb.org/3/"
 
     fun getAllFilms(page: Int): List<Film> {
-        val call = apiService.call(
-            "${url}discover/movie?sort_by=popularity.desc&include_adult=false&include_video=false&language=fr&api_key=${apiKey}&page=${page}"
+        val call = apiService.getCall(
+            "${url}discover/movie?sort_by=popularity.desc&include_adult=false&include_video=false&language=fr&api_key=${apiKey}&page=${page}",
+            APIParserDTO::class.java
         )
         return call.body?.films?: emptyList()
     }
 
     fun getGenres(): List<Category> {
-        val call = apiService.call(
-            "${url}genre/movie/list?&language=fr"
+        val call = apiService.getCall(
+            "${url}genre/movie/list?&language=fr&api_key=${apiKey}",
+            APIParserDTO::class.java
         )
         return call.body?.categories?: emptyList()
     }
+    fun getOneFilm(filmId: Int) : Film? {
+        val call = apiService.getCall(
+            "${url}movie/${filmId}?language=fr&api_key=${apiKey}",
+            Film::class.java
+        )
+        return call.body
+    }
 
     fun getActorsByFilm(filmId: Int): List<Actor> {
-        val call = apiService.call(
-            "${url}movie/${filmId}/credits?&language=fr"
+        val call = apiService.getCall(
+            "${url}movie/${filmId}/credits?&language=fr&api_key=${apiKey}",
+            APIParserDTO::class.java
         )
         return call.body?.actors?: emptyList()
     }
 
     fun searchFilm(query: String): List<Film> {
-        val call = apiService.call(
-            "${url}search/movie/list?&language=fr&query=${query}"
+        val call = apiService.getCall(
+            "${url}search/movie?language=fr&query=${query}&api_key=${apiKey}&popularity.desc",
+            APIParserDTO::class.java
         )
         return call.body?.films?: emptyList()
     }
 
-    fun getOneFilm(filmId: Int) : Film? {
-        val call = apiService.call(
-            "${url}movie/${filmId}?language=fr"
-        )
-        return null
-    }
 
 
 

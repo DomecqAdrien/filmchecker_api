@@ -9,7 +9,7 @@ data class Film(
     @JsonProperty("release_date") val date: String?=null,
     val budget :Int = 0,
     @JsonProperty("genre_ids") val genresId: IntArray,
-    var genres: MutableList<Category> = mutableListOf(),
+    var genres: List<Category> = mutableListOf(),
     val restriction: String?=null,
     val runtime: Int = 0,
     var revenue: Long = 0,
@@ -18,4 +18,5 @@ data class Film(
     @JsonProperty("poster_path") val affiche: String?=null,
     val popularity: Double = 0.0,
     @JsonProperty("vote_average") val voteAverage: Double = 0.0
+
 )
