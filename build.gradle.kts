@@ -49,6 +49,9 @@ tasks.withType<Test> {
 }
 
 tasks.withType<Jar> {
+
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
 	manifest {
 		attributes["Main-Class"] = "com.esgi.filmchecker.FilmcheckerApplicationKt"
 	}
