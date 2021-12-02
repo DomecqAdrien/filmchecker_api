@@ -42,20 +42,4 @@ tasks.withType<Test> {
 	useJUnitPlatform()
 }
 
-tasks.withType<Jar> {
-
-	duplicatesStrategy = DuplicatesStrategy.INHERIT
-
-	manifest {
-		attributes["Main-Class"] = "com.esgi.filmchecker.FilmcheckerApplicationKt"
-	}
-
-	from(sourceSets.main.get().output)
-
-	dependsOn(configurations.runtimeClasspath)
-	from({
-		configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
-	})
-}
-
 
