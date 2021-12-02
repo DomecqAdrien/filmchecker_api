@@ -40,6 +40,13 @@ class FilmService {
         return call.body?.films?: emptyList()
     }
 
+    fun getOneFilm(filmId: Int) : Film? {
+        val call = apiService.call(
+            "${url}movie/${filmId}?language=fr"
+        )
+        return null
+    }
+
 
 
 

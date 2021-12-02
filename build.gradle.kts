@@ -50,11 +50,11 @@ tasks.withType<Test> {
 
 tasks.withType<Jar> {
 	manifest {
-		attributes["Main-Class"] = "com.esgi.filmchecker.FilmcheckerApplication"
+		attributes["Main-Class"] = "com.esgi.filmchecker.FilmcheckerApplicationKt"
 	}
 }
 
 springBoot {
-	mainClass.set("om.esgi.filmchecker.FilmcheckerApplication")
+	mainClass.set("om.esgi.filmchecker.FilmcheckerApplicationKt")
 }
 
