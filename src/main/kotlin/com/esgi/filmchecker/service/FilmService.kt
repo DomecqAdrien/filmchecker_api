@@ -28,13 +28,16 @@ class FilmService {
 
     fun getActorsByFilm(filmId: Int): List<Actor> {
         val call = apiService.call(
-            "${url}genre/movie/list?&language=fr"
+            "${url}movie/${filmId}/credits?&language=fr"
         )
         return call.body?.actors?: emptyList()
     }
 
     fun searchFilm(query: String): List<Film> {
-
+        val call = apiService.call(
+            "${url}search/movie/list?&language=fr&query=${query}"
+        )
+        return call.body?.films?: emptyList()
     }
 
 
