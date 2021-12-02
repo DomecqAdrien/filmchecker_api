@@ -8,7 +8,7 @@ data class Film(
     @JsonProperty("original_title") val titreOriginal: String?=null,
     @JsonProperty("release_date") val date: String?=null,
     val budget :Int = 0,
-    @JsonProperty("genre_ids") val genresId: IntArray,
+    @JsonProperty("genre_ids") val genresId: IntArray?=null,
     var genres: List<Category> = mutableListOf(),
     val restriction: String?=null,
     val runtime: Int = 0,
