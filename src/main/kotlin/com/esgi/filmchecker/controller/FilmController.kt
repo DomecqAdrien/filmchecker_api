@@ -28,6 +28,7 @@ class FilmController(private val filmService: FilmService) {
     @GetMapping("/search/{language}/{query}")
     fun searchFilm(@PathVariable language: String, @PathVariable query: String) {
 
+
     }
 
 
