@@ -1,5 +1,6 @@
 package com.esgi.filmchecker.controller
 
+import com.esgi.filmchecker.model.APIParserDTO
 import com.esgi.filmchecker.model.Actor
 import com.esgi.filmchecker.model.Category
 import com.esgi.filmchecker.model.Film
@@ -33,7 +34,7 @@ class FilmController(private val filmService: FilmService) {
     }
 
     @GetMapping("/film/{id}/actors")
-    fun getActors(@PathVariable id: Int): List<Actor> {
+    fun getActors(@PathVariable id: Int): APIParserDTO {
         return filmService.getActorsByFilm(id)
     }
 }

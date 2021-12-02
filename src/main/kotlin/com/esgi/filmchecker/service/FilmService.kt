@@ -36,12 +36,12 @@ class FilmService {
         return call.body
     }
 
-    fun getActorsByFilm(filmId: Int): List<Actor> {
+    fun getActorsByFilm(filmId: Int): APIParserDTO {
         val call = apiService.getCall(
             "${url}movie/${filmId}/credits?&language=fr&api_key=${apiKey}",
             APIParserDTO::class.java
         )
-        return call.body?.actors?: emptyList()
+        return call.body!!
     }
 
     fun searchFilm(query: String): List<Film> {
