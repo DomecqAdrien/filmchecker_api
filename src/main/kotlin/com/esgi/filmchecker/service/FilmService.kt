@@ -1,5 +1,6 @@
 package com.esgi.filmchecker.service
 
+import com.esgi.filmchecker.model.Actor
 import com.esgi.filmchecker.model.Category
 import com.esgi.filmchecker.model.Film
 import org.springframework.stereotype.Service
@@ -23,6 +24,13 @@ class FilmService {
             "${url}genre/movie/list?&language=fr"
         )
         return call.body?.categories?: emptyList()
+    }
+
+    fun getActorsByFilm(filmId: Int): List<Actor> {
+        val call = apiService.call(
+            "${url}genre/movie/list?&language=fr"
+        )
+        return call.body?.actors?: emptyList()
     }
 
 
