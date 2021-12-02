@@ -25,11 +25,6 @@ class FilmController(private val filmService: FilmService) {
 
     }
 
-    @GetMapping("movie/{id}")
-    fun getActorsByFilm(@PathVariable id: Int) {
-
-    }
-
     @GetMapping("/search/{language}/{query}")
     fun searchFilm(@PathVariable language: String, @PathVariable query: String) {
 
