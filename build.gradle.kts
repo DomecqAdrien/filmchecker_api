@@ -52,9 +52,13 @@ tasks.withType<Jar> {
 	manifest {
 		attributes["Main-Class"] = "com.esgi.filmchecker.FilmcheckerApplicationKt"
 	}
+
+	from(sourceSets.main.get().output)
+
+	dependsOn(configurations.runtimeClasspath)
+	from({
+		configurations.runtimeClasspath.get().filter { it.name.endsWith("jar") }.map { zipTree(it) }
+	})
 }
 
-springBoot {
-	mainClass.set("om.esgi.filmchecker.FilmcheckerApplicationKt")
-}
 
