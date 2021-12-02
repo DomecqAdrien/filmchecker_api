@@ -33,6 +33,10 @@ class FilmService {
         return call.body?.actors?: emptyList()
     }
 
+    fun searchFilm(query: String): List<Film> {
+
+    }
+
 
 
 

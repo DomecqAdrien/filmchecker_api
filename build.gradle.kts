@@ -48,6 +48,13 @@ tasks.withType<Test> {
 	useJUnitPlatform()
 }
 
+tasks.withType<Jar> {
+	manifest {
+		attributes["Main-Class"] = "com.esgi.filmchecker.FilmcheckerApplication"
+	}
+}
+
 springBoot {
 	mainClass.set("om.esgi.filmchecker.FilmcheckerApplication")
 }
+
