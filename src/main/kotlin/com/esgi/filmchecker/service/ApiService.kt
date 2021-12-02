@@ -12,6 +12,7 @@ class ApiService {
 
     fun call(url: String): ResponseEntity<APIParserDTO> {
         return restTemplate.getForEntity(url, APIParserDTO::class.java)
-
     }
+
+
 }

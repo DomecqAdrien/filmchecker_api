@@ -1,4 +1,4 @@
-package model
+package com.esgi.filmchecker.model
 
 data class Favori(
     val filmId: Int?=null,

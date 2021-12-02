@@ -1,7 +1,10 @@
-package model
+package com.esgi.filmchecker.model
+
+import com.fasterxml.jackson.annotation.JsonProperty
+
 
 data class Actor(
     val name: String,
     var character: String,
-    var imageUrl: String
+    @JsonProperty("profile_path") var imageUrl: String
 )

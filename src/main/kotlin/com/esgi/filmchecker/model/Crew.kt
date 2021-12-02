@@ -1,4 +1,7 @@
-package model
+package com.esgi.filmchecker.model
+
+import com.fasterxml.jackson.annotation.JsonProperty
+
 
 data class Crew(
     val department: String?=null,
@@ -6,5 +9,5 @@ data class Crew(
     val id: Int = 0,
     val job: String?=null,
     val name: String?=null,
-    var imageUrl: String? = null
+    @JsonProperty("profile_path") var imageUrl: String? = null
 )
