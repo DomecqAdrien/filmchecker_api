@@ -20,7 +20,7 @@ class FilmController(private val filmService: FilmService) {
 
     }
 
-    @GetMapping("movie/{id}/{language}")
+    @GetMapping("film/{id}/{language}")
     fun getOneFilm(@PathVariable id: Int, @PathVariable language: String) {
 
     }
