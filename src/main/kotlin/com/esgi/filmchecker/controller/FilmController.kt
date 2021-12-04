@@ -38,10 +38,13 @@ class FilmController(private val filmService: FilmService) {
         return filmService.getActorsByFilm(id)
     }
 
-    @GetMapping("/film/{id}/note")
-    fun rateMovie(@PathVariable id: Int): String? {
-        val userId = "ulAiHD2LP40SbnMyuHiT"
-        val movieId = 580489
-        return filmService.rateMovie(id, userId, movieId)
+    @GetMapping("/film/{movieId}/user/{userEmail}/note/{note}")
+    fun rateMovie(@PathVariable movieId: Int, @PathVariable userEmail: String, @PathVariable note: Int): String? {
+        return filmService.rateMovie(movieId, userEmail, note)
+    }
+
+    @GetMapping("/film/{movieId}/user/{userEmail}/comment")
+    fun commentMovie(@PathVariable movieId: Int, @PathVariable userEmail: String,@RequestBody comment: String): String? {
+        return filmService.commentMovie(movieId, userEmail, comment)
     }
 }
