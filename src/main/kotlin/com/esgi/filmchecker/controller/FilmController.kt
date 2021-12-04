@@ -23,7 +23,7 @@ class FilmController(private val filmService: FilmService) {
         return filmService.getGenres()
     }
 
-    @GetMapping("/film/{id}/")
+    @GetMapping("/film/{id}")
     fun getOneFilm(@PathVariable id: Int): Film? {
         return filmService.getOneFilm(id)
     }

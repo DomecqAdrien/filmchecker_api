@@ -16,7 +16,7 @@ class FBService {
             val serviceAccount = FileInputStream(".\\serviceaccount.json")
             val options: FirebaseOptions = FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .setDatabaseUrl("https://citations-f72f3.firebaseio.com/")
+                .setDatabaseUrl("https://filmchecker-d3c80.firebaseio.com/")
                 .build()
             FirebaseApp.initializeApp(options)
         } catch (e: Exception) {
