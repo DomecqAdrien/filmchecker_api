@@ -14,10 +14,10 @@ class FBService {
     @PostConstruct
     fun initialize() {
         try {
-            val res = javaClass.classLoader.getResource("serviceaccount.json")!!
-            val file = Paths.get(res.toURI()).toFile()
-            val absolutePath: String = file.absolutePath
-            val serviceAccount = FileInputStream(absolutePath)
+            //val res = javaClass.classLoader.getResourceAsStream ("serviceaccount.json")!!
+            //val file = Paths.get(res.toURI()).toFile()
+            //val absolutePath: String = file.absolutePath
+            val serviceAccount = javaClass.classLoader.getResourceAsStream ("serviceaccount.json")!!
             val options: FirebaseOptions = FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                 .setDatabaseUrl("https://filmchecker-d3c80.firebaseio.com/")
