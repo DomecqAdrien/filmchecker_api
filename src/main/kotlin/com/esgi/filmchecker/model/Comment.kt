@@ -1,7 +1,7 @@
 package com.esgi.filmchecker.model
 
-data class Note(
+data class Comment(
     val userEmail: String,
     val movieId: Int,
-    val note: Int
+    val comment: String
 )

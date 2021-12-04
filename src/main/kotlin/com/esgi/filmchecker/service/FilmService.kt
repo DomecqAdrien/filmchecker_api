@@ -59,11 +59,19 @@ class FilmService {
         return citations
     }
 
-    fun rateMovie(note: Int, userId: String, movieId: Int): String? {
-        val note = Note(userId, movieId, note)
+    fun rateMovie(movieId: Int, userEmail: String, note: Int): String? {
+        val note = Note(userEmail, movieId, note)
         println(note)
         val dbFirestore = FirestoreClient.getFirestore()
         val collectionsApiFuture = dbFirestore.collection("notes").document().set(note)
+        return collectionsApiFuture.get().updateTime.toString()
+    }
+
+    fun commentMovie(movieId: Int, userEmail: String, comment: String): String? {
+        val comment = Comment(userEmail, movieId, comment)
+        println(comment)
+        val dbFirestore = FirestoreClient.getFirestore()
+        val collectionsApiFuture = dbFirestore.collection("comments").document().set(comment)
         return collectionsApiFuture.get().updateTime.toString()
     }
 
