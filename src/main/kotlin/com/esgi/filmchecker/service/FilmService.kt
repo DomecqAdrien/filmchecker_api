@@ -1,7 +1,6 @@
 package com.esgi.filmchecker.service
 
 import com.esgi.filmchecker.model.*
-import com.google.cloud.firestore.DocumentReference
 import com.google.firebase.cloud.FirestoreClient
 import org.springframework.stereotype.Service
 
@@ -54,9 +53,7 @@ class FilmService {
     fun test(): List<Favori?> {
         val dbFirestore = FirestoreClient.getFirestore()
         val docs = dbFirestore.collection("favoris")
-        val citations = docs.listDocuments().map { it.get().get().toObject(Favori::class.java) }
-
-        return citations
+        return docs.listDocuments().map { it.get().get().toObject(Favori::class.java) }
     }
 
     fun rateMovie(movieId: Int, userEmail: String, note: Int): String? {
