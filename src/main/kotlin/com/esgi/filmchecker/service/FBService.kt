@@ -5,6 +5,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import org.springframework.stereotype.Service
 import java.io.FileInputStream
+import java.nio.file.Paths
 import javax.annotation.PostConstruct
 
 @Service
@@ -13,7 +14,10 @@ class FBService {
     @PostConstruct
     fun initialize() {
         try {
-            val serviceAccount = FileInputStream(".\\src\\main\\resources\\serviceaccount.json")
+            val res = javaClass.classLoader.getResource("serviceaccount.json")!!
+            val file = Paths.get(res.toURI()).toFile()
+            val absolutePath: String = file.absolutePath
+            val serviceAccount = FileInputStream(absolutePath)
             val options: FirebaseOptions = FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                 .setDatabaseUrl("https://filmchecker-d3c80.firebaseio.com/")
