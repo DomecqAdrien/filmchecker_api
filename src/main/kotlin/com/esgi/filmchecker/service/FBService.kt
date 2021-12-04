@@ -13,7 +13,7 @@ class FBService {
     @PostConstruct
     fun initialize() {
         try {
-            val serviceAccount = FileInputStream(".\\serviceaccount.json")
+            val serviceAccount = FileInputStream(".\\src\\main\\resources\\serviceaccount.json")
             val options: FirebaseOptions = FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                 .setDatabaseUrl("https://filmchecker-d3c80.firebaseio.com/")
