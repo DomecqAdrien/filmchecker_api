@@ -1,9 +1,8 @@
 package com.esgi.filmchecker.service
 
-import com.esgi.filmchecker.model.APIParserDTO
-import com.esgi.filmchecker.model.Actor
-import com.esgi.filmchecker.model.Category
-import com.esgi.filmchecker.model.Film
+import com.esgi.filmchecker.model.*
+import com.google.cloud.firestore.DocumentReference
+import com.google.firebase.cloud.FirestoreClient
 import org.springframework.stereotype.Service
 
 @Service
@@ -52,12 +51,21 @@ class FilmService {
         return call.body?.films?: emptyList()
     }
 
+    fun test(): List<Favori?> {
+        val dbFirestore = FirestoreClient.getFirestore()
+        val docs = dbFirestore.collection("favoris")
+        val citations = docs.listDocuments().map { it.get().get().toObject(Favori::class.java) }
 
+        return citations
+    }
 
-
-
-
-
+    fun rateMovie(note: Int, userId: String, movieId: Int): String? {
+        val note = Note(userId, movieId, note)
+        println(note)
+        val dbFirestore = FirestoreClient.getFirestore()
+        val collectionsApiFuture = dbFirestore.collection("notes").document().set(note)
+        return collectionsApiFuture.get().updateTime.toString()
+    }
 
 
 }

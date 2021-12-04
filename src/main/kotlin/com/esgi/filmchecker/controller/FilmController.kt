@@ -1,17 +1,16 @@
 package com.esgi.filmchecker.controller
 
-import com.esgi.filmchecker.model.APIParserDTO
-import com.esgi.filmchecker.model.Actor
-import com.esgi.filmchecker.model.Category
-import com.esgi.filmchecker.model.Film
+import com.esgi.filmchecker.model.*
 import com.esgi.filmchecker.service.FilmService
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 class FilmController(private val filmService: FilmService) {
+
+    @GetMapping("/test")
+    fun test(): List<Favori?> {
+        return filmService.test()
+    }
 
 
     @GetMapping("/films/{page}")
@@ -37,5 +36,12 @@ class FilmController(private val filmService: FilmService) {
     @GetMapping("/film/{id}/actors")
     fun getActors(@PathVariable id: Int): APIParserDTO {
         return filmService.getActorsByFilm(id)
+    }
+
+    @GetMapping("/film/{id}/note")
+    fun rateMovie(@PathVariable id: Int): String? {
+        val userId = "ulAiHD2LP40SbnMyuHiT"
+        val movieId = 580489
+        return filmService.rateMovie(id, userId, movieId)
     }
 }
