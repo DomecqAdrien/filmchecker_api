@@ -76,5 +76,24 @@ class FilmService {
         return collectionsApiFuture.get().updateTime.toString()
     }
 
+    fun handleFavorites(userEmail: String, movieId: Int): String {
+        val dbFirestore = FirestoreClient.getFirestore()
+        val docs = dbFirestore.collection("favoris")
+        for(doc in docs.listDocuments()){
+            val favori = doc.get().get().toObject(Favori::class.java)
+            val id = doc.get().get().id
+            if(favori?.movieId == movieId && favori?.userEmail == userEmail){
+                val collectionsApiFuture = dbFirestore.collection("favoris").document(id).delete()
+                return collectionsApiFuture.get().updateTime.toString()
+            }
+            else{
+                val favori = Favori(true,movieId, userEmail)
+                val collectionsApiFuture = dbFirestore.collection("favoris").document().set(favori)
+                return collectionsApiFuture.get().updateTime.toString()
+            }
+        }
+        return "ok"
+    }
+
 
 }
