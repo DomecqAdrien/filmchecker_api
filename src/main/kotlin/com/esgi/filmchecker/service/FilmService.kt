@@ -53,6 +53,10 @@ class FilmService {
     fun test(): List<Favori?> {
         val dbFirestore = FirestoreClient.getFirestore()
         val docs = dbFirestore.collection("favoris")
+        docs.listDocuments().forEach {
+            println(it.id)
+
+        }
         return docs.listDocuments().map { it.get().get().toObject(Favori::class.java) }
     }
 

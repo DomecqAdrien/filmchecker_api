@@ -44,7 +44,8 @@ class FilmController(private val filmService: FilmService) {
     }
 
     @GetMapping("/film/{movieId}/user/{userEmail}/comment")
-    fun commentMovie(@PathVariable movieId: Int, @PathVariable userEmail: String,@RequestBody comment: String): String? {
+    fun commentMovie(@PathVariable movieId: Int, @PathVariable userEmail: String, @RequestBody comment: String): String? {
         return filmService.commentMovie(movieId, userEmail, comment)
     }
+
 }
