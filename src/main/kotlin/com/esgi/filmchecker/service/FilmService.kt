@@ -3,6 +3,9 @@ package com.esgi.filmchecker.service
 import com.esgi.filmchecker.model.*
 import com.google.firebase.cloud.FirestoreClient
 import org.springframework.stereotype.Service
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @Service
 class FilmService {
@@ -68,8 +71,8 @@ class FilmService {
         return collectionsApiFuture.get().updateTime.toString()
     }
 
-    fun commentMovie(movieId: Int, userEmail: String, comment: String): String? {
-        val comment = Comment(userEmail, movieId, comment)
+    fun commentMovie(movieId: Int, userEmail: String, comment: Comment): String? {
+        val comment = Comment(userEmail, movieId, comment.comment)
         println(comment)
         val dbFirestore = FirestoreClient.getFirestore()
         val collectionsApiFuture = dbFirestore.collection("comments").document().set(comment)
@@ -95,5 +98,76 @@ class FilmService {
         return "ok"
     }
 
+    fun getCreneauxByMovie(movieId: Int): List<Creneau> {
+        val dbFirestore = FirestoreClient.getFirestore()
+        val docs = dbFirestore.collection("creneaux")
+        var creneauxByMovie = mutableListOf<Creneau>()
+        for(doc in docs.listDocuments()){
+            val creneau = doc.get().get().toObject(Creneau::class.java)
+            if(creneau?.movieId == movieId){
+                creneauxByMovie.add(creneau)
+            }
+        }
+        return creneauxByMovie
+    }
 
+    fun getNotesByMovie(movieId: Int): List<Note> {
+        val dbFirestore = FirestoreClient.getFirestore()
+        val docs = dbFirestore.collection("notes")
+        var notesByMovie = mutableListOf<Note>()
+        for(doc in docs.listDocuments()){
+            val note = doc.get().get().toObject(Note::class.java)
+            if(note?.movieId == movieId){
+                notesByMovie.add(note)
+            }
+        }
+        return notesByMovie
+    }
+
+    fun createCreneau(creneau: Creneau): String{
+        val dbFirestore = FirestoreClient.getFirestore()
+        val collectionsApiFuture = dbFirestore.collection("creneaux").document().set(creneau)
+        return collectionsApiFuture.get().updateTime.toString()
+    }
+
+    fun getSalles(): List<Salle?> {
+        val dbFirestore = FirestoreClient.getFirestore()
+        val docs = dbFirestore.collection("salles")
+        return docs.listDocuments().map { it.get().get().toObject(Salle::class.java) }
+    }
+
+    fun createSessions() : String{
+        val horairesDebut = listOf<String>("00h00","3h00", "9h00", "13h00", "16h00", "19h00", "22h00")
+        val horairesFin = listOf<String>("02h00","5h00", "12h00", "15h00", "18h00", "21h00", "00h00")
+        val currentDate = LocalDateTime.now();
+        var currentYear = currentDate.year
+        var currentMonth = currentDate.monthValue
+        var currentDay = currentDate.dayOfMonth
+        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        var formattedDate = currentDate.format(formatter);
+        var films = listOf<Film>()
+        films = getAllFilms(1)
+        val moviesIterator = films.listIterator()
+        var salles = listOf<Salle?>()
+        salles = getSalles()
+
+        while(moviesIterator.hasNext()){
+            var movie = moviesIterator.next()
+            var sallesIterator = salles.listIterator()
+            while(sallesIterator.hasNext()) {
+                var salle = sallesIterator.next()
+                val beginningIterator = horairesDebut.listIterator()
+                val endingIterator = horairesFin.listIterator()
+                while (beginningIterator.hasNext()) {
+                    var creneau = Creneau(beginningIterator.next(), endingIterator.next(), movie.id, salle?.numeroSalle, formattedDate)
+                    println(creneau)
+                    //TODO("Change with real create")
+                }
+            }
+            currentDay += 1
+            var dateOfSession = LocalDateTime.of(currentYear, currentMonth, currentDay, 0, 0)
+            formattedDate = dateOfSession.format(formatter);
+        }
+        return "ok"
+    }
 }

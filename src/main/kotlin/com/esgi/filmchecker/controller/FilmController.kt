@@ -45,13 +45,27 @@ class FilmController(private val filmService: FilmService) {
 
 
     @PostMapping("/film/{movieId}/user/{userEmail}/comment")
-    fun commentMovie(@PathVariable movieId: Int, @PathVariable userEmail: String,@RequestBody comment: String): String? {
+    fun commentMovie(@PathVariable movieId: Int, @PathVariable userEmail: String,@RequestBody comment: Comment): String? {
         return filmService.commentMovie(movieId, userEmail, comment)
     }
 
     @GetMapping("/user/{userEmail}/movie/{movieId}/favori")
     fun handleFavorites(@PathVariable userEmail: String, @PathVariable movieId: Int): String{
-        println(movieId)
         return filmService.handleFavorites(userEmail, movieId)
+    }
+
+    @GetMapping("/create-sessions")
+    fun createSessions(): String{
+        return filmService.createSessions();
+    }
+
+    @GetMapping("/film/{movieId}/creneaux")
+    fun getCreneauxByMovie(@PathVariable movieId: Int): List<Creneau> {
+        return filmService.getCreneauxByMovie(movieId);
+    }
+
+    @GetMapping("/film/{movieId}/notes")
+    fun getNotesByMovie(@PathVariable movieId: Int): List<Note> {
+        return filmService.getNotesByMovie(movieId);
     }
 }
