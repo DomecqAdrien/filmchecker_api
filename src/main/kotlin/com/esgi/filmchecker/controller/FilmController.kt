@@ -68,4 +68,9 @@ class FilmController(private val filmService: FilmService) {
     fun getNotesByMovie(@PathVariable movieId: Int): List<Note> {
         return filmService.getNotesByMovie(movieId);
     }
+
+    @GetMapping("/film/{movieId}/comments")
+    fun getCommentsByMovie(@PathVariable movieId: Int): List<Comment> {
+        return filmService.getCommentsByMovie(movieId);
+    }
 }

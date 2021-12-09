@@ -124,6 +124,19 @@ class FilmService {
         return notesByMovie
     }
 
+    fun getCommentsByMovie(movieId: Int): List<Comment> {
+        val dbFirestore = FirestoreClient.getFirestore()
+        val docs = dbFirestore.collection("comments")
+        var commentsByMovie = mutableListOf<Comment>()
+        for(doc in docs.listDocuments()){
+            val comment = doc.get().get().toObject(Comment::class.java)
+            if(comment?.movieId == movieId){
+                commentsByMovie.add(comment)
+            }
+        }
+        return commentsByMovie
+    }
+
     fun createCreneau(creneau: Creneau): String{
         val dbFirestore = FirestoreClient.getFirestore()
         val collectionsApiFuture = dbFirestore.collection("creneaux").document().set(creneau)
