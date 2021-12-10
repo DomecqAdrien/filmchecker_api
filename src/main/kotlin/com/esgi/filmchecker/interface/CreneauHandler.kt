@@ -21,8 +21,7 @@ abstract class CreneauHandler(private val next: CreneauHandler?) {
 class DatetimeVerifier(next: CreneauHandler?): CreneauHandler(next){
     override fun doHandle(creneau: Creneau): Boolean {
         val now = LocalDateTime.now()
-        //val dateOfSessionList = creneau.dateJour.split("/")
-        val dateOfSession = LocalDateTime.parse(creneau.dateJour, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+        val dateOfSession = LocalDateTime.parse(creneau.dateJour, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
         println(now)
         println(dateOfSession)
         if(dateOfSession >= now){

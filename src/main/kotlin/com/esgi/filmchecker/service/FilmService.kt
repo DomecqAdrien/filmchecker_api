@@ -210,27 +210,28 @@ class FilmService {
     }
 
     fun createSessions() : String{
-        val horairesDebut = listOf<String>("00h00","3h00", "9h00", "13h00", "16h00", "19h00", "22h00")
-        val horairesFin = listOf<String>("02h00","5h00", "12h00", "15h00", "18h00", "21h00", "00h00")
+        val horairesDebut = listOf<String>("00h00", "9h00", "13h00", "19h00", "22h00")
+        val horairesFin = listOf<String>("02h00", "12h00", "15h00", "21h00", "00h00")
         val currentDate = LocalDateTime.now();
         var currentYear = currentDate.year
         var currentMonth = currentDate.monthValue
         var currentDay = currentDate.dayOfMonth
-        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
+        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
         var formattedDate = currentDate.format(formatter);
         var films = listOf<Film>()
         films = getAllFilms(1)
         val moviesIterator = films.listIterator()
         var salles = listOf<Salle?>()
         salles = getSalles()
-
+        var cpt=0
         while(moviesIterator.hasNext()){
-            var movie = moviesIterator.next()
+
             var sallesIterator = salles.listIterator()
             while(sallesIterator.hasNext()) {
+                var movie = moviesIterator.next()
                 var salle = sallesIterator.next()
-                val beginningIterator = horairesDebut.listIterator()
-                val endingIterator = horairesFin.listIterator()
+                var beginningIterator = horairesDebut.listIterator()
+                var endingIterator = horairesFin.listIterator()
                 while (beginningIterator.hasNext()) {
                     var creneau = Creneau(heureDebut = beginningIterator.next(),heureFin = endingIterator.next(),movieId = movie.id,salleId = salle?.numeroSalle, dateJour =  formattedDate)
                     createCreneau(creneau)
@@ -240,6 +241,7 @@ class FilmService {
             currentDay += 1
             var dateOfSession = LocalDateTime.of(currentYear, currentMonth, currentDay, 0, 0)
             formattedDate = dateOfSession.format(formatter);
+            println(formattedDate)
         }
         return "ok"
     }

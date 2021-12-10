@@ -75,7 +75,7 @@ class FilmController(private val filmService: FilmService) {
     }
 
     @PostMapping("/book-session/")
-    fun getCommentsByMovie(@RequestBody reservation: Reservation): String {
+    fun bookSession(@RequestBody reservation: Reservation): String {
         return filmService.bookSession(reservation);
     }
 }
