@@ -26,9 +26,11 @@ class DatetimeVerifier(next: CreneauHandler?): CreneauHandler(next){
         println(now)
         println(dateOfSession)
         if(dateOfSession >= now){
+            println("la date n'est pas encore passée")
             return false
         }
         println("datetime not verified")
+        throw HandlerException("Date is already passed")
         return true
     }
 }
@@ -48,6 +50,9 @@ class RoomSpaceVerifier(next: CreneauHandler?): CreneauHandler(next){
             }
         }
         println("roomspace not verified")
+        throw HandlerException("No more space left in room")
         return true
     }
 }
+
+class HandlerException(message: String): Exception(message)

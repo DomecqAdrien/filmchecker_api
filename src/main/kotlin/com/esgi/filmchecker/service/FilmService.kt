@@ -193,7 +193,7 @@ class FilmService {
     fun createReservation(reservation: Reservation): String {
         val dbFirestore = FirestoreClient.getFirestore()
         val collectionsApiFuture = dbFirestore.collection("reservations").document().set(reservation)
-        return collectionsApiFuture.get().updateTime.toString()
+        return "Réservation effectuée"
     }
 
     fun getCreneauById(creneauId: String?): Creneau {
