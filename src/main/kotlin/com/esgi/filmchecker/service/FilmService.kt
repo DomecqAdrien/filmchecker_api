@@ -1,5 +1,7 @@
 package com.esgi.filmchecker.service
 
+import com.esgi.filmchecker.`interface`.DatetimeVerifier
+import com.esgi.filmchecker.`interface`.RoomSpaceVerifier
 import com.esgi.filmchecker.model.*
 import com.google.firebase.cloud.FirestoreClient
 import org.springframework.stereotype.Service
@@ -103,9 +105,10 @@ class FilmService {
         val docs = dbFirestore.collection("creneaux")
         var creneauxByMovie = mutableListOf<Creneau>()
         for(doc in docs.listDocuments()){
-            val creneau = doc.get().get().toObject(Creneau::class.java)
+            var creneau = doc.get().get().toObject(Creneau::class.java)
+            var realCreneau = Creneau(doc.id, creneau?.heureDebut, creneau?.heureFin, creneau?.movieId, creneau?.salleId, creneau?.dateJour)
             if(creneau?.movieId == movieId){
-                creneauxByMovie.add(creneau)
+                creneauxByMovie.add(realCreneau)
             }
         }
         return creneauxByMovie
@@ -149,6 +152,63 @@ class FilmService {
         return docs.listDocuments().map { it.get().get().toObject(Salle::class.java) }
     }
 
+    fun getSalleById(salleId: Int?): Salle? {
+        val dbFirestore = FirestoreClient.getFirestore()
+        val docs = dbFirestore.collection("salles")
+        for(doc in docs.listDocuments()){
+            val salle = doc.get().get().toObject(Salle::class.java)
+            if(salle?.numeroSalle == salleId){
+                return salle
+            }
+        }
+        return Salle()
+    }
+
+    fun getReservationsByCreneau(creneauId: String?): List<Reservation?> {
+        val dbFirestore = FirestoreClient.getFirestore()
+        val docs = dbFirestore.collection("reservations")
+        var reservationsByCreneau = mutableListOf<Reservation>()
+        for(doc in docs.listDocuments()) {
+            val reservation = doc.get().get().toObject(Reservation::class.java)
+            if(reservation != null){
+                if (reservation.creneauId == creneauId) {
+                    reservationsByCreneau.add(reservation)
+                }
+            }
+        }
+        return reservationsByCreneau
+    }
+
+    fun bookSession(reservation: Reservation): String {
+        val datetimeVerifier = DatetimeVerifier(null)
+        val roomSpaceVerifier = RoomSpaceVerifier(datetimeVerifier)
+
+        val creneau = getCreneauById(reservation.creneauId)
+
+        roomSpaceVerifier.handle(creneau)
+
+        return createReservation(reservation)
+    }
+
+    fun createReservation(reservation: Reservation): String {
+        val dbFirestore = FirestoreClient.getFirestore()
+        val collectionsApiFuture = dbFirestore.collection("reservations").document().set(reservation)
+        return collectionsApiFuture.get().updateTime.toString()
+    }
+
+    fun getCreneauById(creneauId: String?): Creneau {
+        val dbFirestore = FirestoreClient.getFirestore()
+        val docs = dbFirestore.collection("creneaux")
+        for(doc in docs.listDocuments()){
+            var creneau = doc.get().get().toObject(Creneau::class.java)
+            var realCreneau = Creneau(doc.id, creneau?.heureDebut, creneau?.heureFin, creneau?.movieId, creneau?.salleId, creneau?.dateJour)
+            if(realCreneau?.id == creneauId){
+                return realCreneau
+            }
+        }
+        return Creneau()
+    }
+
     fun createSessions() : String{
         val horairesDebut = listOf<String>("00h00","3h00", "9h00", "13h00", "16h00", "19h00", "22h00")
         val horairesFin = listOf<String>("02h00","5h00", "12h00", "15h00", "18h00", "21h00", "00h00")
@@ -156,7 +216,7 @@ class FilmService {
         var currentYear = currentDate.year
         var currentMonth = currentDate.monthValue
         var currentDay = currentDate.dayOfMonth
-        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")
         var formattedDate = currentDate.format(formatter);
         var films = listOf<Film>()
         films = getAllFilms(1)
@@ -172,8 +232,8 @@ class FilmService {
                 val beginningIterator = horairesDebut.listIterator()
                 val endingIterator = horairesFin.listIterator()
                 while (beginningIterator.hasNext()) {
-                    var creneau = Creneau(beginningIterator.next(), endingIterator.next(), movie.id, salle?.numeroSalle, formattedDate)
-                    println(creneau)
+                    var creneau = Creneau(heureDebut = beginningIterator.next(),heureFin = endingIterator.next(),movieId = movie.id,salleId = salle?.numeroSalle, dateJour =  formattedDate)
+                    createCreneau(creneau)
                     //TODO("Change with real create")
                 }
             }

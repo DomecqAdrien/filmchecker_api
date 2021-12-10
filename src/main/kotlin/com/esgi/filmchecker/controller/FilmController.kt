@@ -73,4 +73,9 @@ class FilmController(private val filmService: FilmService) {
     fun getCommentsByMovie(@PathVariable movieId: Int): List<Comment> {
         return filmService.getCommentsByMovie(movieId);
     }
+
+    @PostMapping("/book-session/")
+    fun getCommentsByMovie(@RequestBody reservation: Reservation): String {
+        return filmService.bookSession(reservation);
+    }
 }
